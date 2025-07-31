@@ -1,20 +1,35 @@
 import pytest
-from selenium.webdriver.chrome.options import Options
-from selenium import webdriver
-from selenium.webdriver.common.by import By
+# import requests
 
-options = Options()
-# options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
-options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
-browser = webdriver.Chrome(options=options)
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import time
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--language",
+        action="store",
+        default=None,
+        help="Choose your language: ru, en, ec, fr",
+    )
+
 
 @pytest.fixture(scope="function")
-def browser():
-    print("\nоткрытие браузера для теста..")
-    options = webdriver.ChromeOptions()
-    # options.add_experimental_option('prefs', {'intl.accept_languages': user_language})
+def browser(request):
+    user_language = request.config.getoption("--language")
+    options = Options()
+    options.add_experimental_option("prefs", {"intl.accept_language": user_language})
+    print("\nstart browser..")
     browser = webdriver.Chrome(options=options)
-    browser.implicitly_wait(10)
+    # browser.implicitly_wait(10)
+    if user_language == "ru":
+        print("\nuse russian language..")
+    elif user_language == "es":
+        print("\nuse espanian language..")
+    else:
+        raise pytest.UsageError("--language should be 'es'")
     yield browser
-    print("\nзакрытие браузера..")
+    time.sleep(10)
+    print("\nclose browser..")
     browser.quit()
