@@ -14,4 +14,4 @@ def test_find_button_add_to_basket(browser):
     assert (
         text_find_need_element == "Ajouter au panier"
         or text_find_need_element == "Añadir al carrito"
-    ), "Нет этих слов, вероятно не тот язык!"
+    ), "Нет этих слов, вероятно не тот язык!!"
