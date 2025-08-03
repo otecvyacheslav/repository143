@@ -1,6 +1,7 @@
 import pytest  # импорт пайтеста
 from selenium import webdriver  # импорт вебдрайвера
-from selenium.webdriver.chrome.options import (Options)
+from selenium.webdriver.chrome.options import Options
+
 # импорт работы с настройками селениума
 import time  # импорт времени
 
@@ -11,7 +12,7 @@ def pytest_addoption(parser):  # парсер
         "--language",
         action="store",
         default=None,
-        help="Choose your language: ru, en, ec, fr",
+        help="Choose your language: ru, en, ec, fr ...",
     )
 
 
@@ -31,15 +32,7 @@ def browser(request):  # реквест (гугли, не объяснить п�
         f"--lang={user_language}"
     )  # взяли переменную и добавили (т.к. некоторые версии Chrome и ChromeDriver лучше реагируют на `–lang` на системном уровне, который передается как аргумент командной строки.)
     browser = webdriver.Chrome(options=options)  # запускаем хром
-    browser.implicitly_wait(10)  # добавили неявное ожидание до 10 секунд
-    if user_language == "fr":  # если используем фр
-        print("\nuse french language..")  # принт в консоль
-    elif user_language == "es":  # если используем ес
-        print("\nuse spanish language..")  # принт в консоль
-    else:  # иначе
-        raise pytest.UsageError(
-            "--language should be 'fr' or 'es'"
-        )  # выпадет ошибка с описанием в скобках
+    browser.implicitly_wait(10)
     yield browser  # Значение выражения yield* само по себе равно последнему значению итерируемого объекта (т.е., того когда done равно true). То есть в конце передаем в browser то, что ниже
     time.sleep(10)  # ожидание в 10 секунд
     print("\nclose browser..")  # принт в консоль
